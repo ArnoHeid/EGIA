@@ -8,22 +8,38 @@
             if (canvas.getContext) {
                 var ctx = canvas.getContext('2d');
 
+                //Frame
+                ctx.fillRect(5,5,140,140);
+                ctx.clearRect(15,15,120,120);
+
+                // Outer circle
                 ctx.beginPath();
-                ctx.arc(75, 75, 50, 0, Math.PI * 2, true); // Outer circle
-                ctx.fillStyle = 'rgba(255,0,0,0.5)';
+                ctx.arc(75, 75, 50, 0, Math.PI * 2, true);
+                ctx.fillStyle = 'rgba(229,198,163)';
                 ctx.fill();
                 ctx.stroke();
+                // Mouth
                 ctx.beginPath();
-                ctx.arc(75, 75, 35, 0.8, Math.PI-0.8, false);  // Mouth (clockwise)
+                ctx.arc(75, 75, 35, 0.8, Math.PI-0.8, false);
                 ctx.stroke();
+                // Left eye
                 ctx.beginPath();
                 ctx.moveTo(70, 65);
-                ctx.arc(60, 65, 10, 0, Math.PI * 2, true);  // Left eye
+                ctx.arc(60, 65, 10, 0, Math.PI * 2, true);
+                // Right eye
                 ctx.moveTo(95, 65);
-                ctx.arc(90, 65, 5, 0, Math.PI * 2, true);  // Right eye
+                ctx.arc(90, 65, 10, 0, Math.PI * 2, true);
+                ctx.fillStyle = 'rgba(255,255,255,1)';
+                ctx.fill();
+                // Left eye
+                ctx.beginPath();
+                ctx.moveTo(70, 65);
+                ctx.arc(60, 65, 5, 0, Math.PI * 2, true);
+                // Right eye
+                ctx.moveTo(95, 65);
+                ctx.arc(90, 65, 5, 0, Math.PI * 2, true);
                 ctx.fillStyle = 'rgba(0,0,255,1)';
                 ctx.fill();
-                ctx.stroke();
 
                 ctx.beginPath();
                 ctx.moveTo(75,75);
