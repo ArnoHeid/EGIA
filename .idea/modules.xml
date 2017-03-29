@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/EGIA.iml" filepath="$PROJECT_DIR$/EGIA.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HelloPoint/HelloPoint.iml" filepath="$PROJECT_DIR$/HelloPoint/HelloPoint.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HelloTriangle/HelloTriangle.iml" filepath="$PROJECT_DIR$/HelloTriangle/HelloTriangle.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Uebung1/Uebung1.iml" filepath="$PROJECT_DIR$/Uebung1/Uebung1.iml" />
+    </modules>
+  </component>
+</project>
