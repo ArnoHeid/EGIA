@@ -2,20 +2,37 @@
 <html>
 <head>
     <meta charset="utf-8"/>
+    
     <script type="application/javascript">
+    var gray = 0;  
+    
         function draw() {
             var canvas = document.getElementById('canvas');
             if (canvas.getContext) {
                 var ctx = canvas.getContext('2d');
+                
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
 
                 //Frame
+                ctx.fillStyle = 'rgba('+gray+','+gray+','+gray+',1)';
+                ctx.strokeStyle = 'rgba(0,0,0,1)';
                 ctx.fillRect(5,5,140,140);
                 ctx.clearRect(15,15,120,120);
+
+				ctx.moveTo(110,110);
+                ctx.lineTo(120,135);
+                ctx.lineTo(80,135);
+                ctx.lineTo(80,120);
+                ctx.fillStyle = 'rgba(102,51,0,1)';
+                ctx.strokeStyle = 'rgba(50,25,0,1)';
+                ctx.fill();
+                ctx.stroke();
+
 
                 // Outer circle
                 ctx.beginPath();
                 ctx.arc(75, 75, 50, 0, Math.PI * 2, true);
-                ctx.fillStyle = 'rgba(229,198,163)';
+                ctx.fillStyle = 'rgba(229,198,163,1)';
                 ctx.fill();
                 ctx.stroke();
                 // Mouth
@@ -48,30 +65,55 @@
                 ctx.stroke();
 
                 ctx.beginPath();
-                ctx.moveTo(30,25);
-                ctx.lineTo(40,15);
+                ctx.moveTo(30,50);
+                ctx.lineTo(40,33);
                 ctx.lineTo(50,25);
-                ctx.lineTo(60,15);
-                ctx.lineTo(70,25);
-                ctx.lineTo(80,15);
-                ctx.lineTo(90,25);
-                ctx.lineTo(100,15);
-                ctx.lineTo(110,25);
-                ctx.lineTo(120,15);
-                ctx.lineTo(120,45);
-                ctx.lineTo(30,45);
-                ctx.lineTo(30,25);
-                ctx.fillStyle = 'rgba(255,215,0,1)';
-                ctx.strokeStyle = 'rgba(218,165,32,1)';
+                ctx.lineTo(60,23);
+                ctx.lineTo(70,21);
+                ctx.lineTo(80,22);
+                ctx.lineTo(90,23);
+
+                ctx.lineTo(100,25);
+                ctx.lineTo(115,35);
+                ctx.lineTo(120,50);
+                ctx.lineTo(80,45);
+                ctx.lineTo(50,45);
+                ctx.lineTo(30,50);
+
+                ctx.fillStyle = 'rgba(102,51,0,1)';
+                ctx.strokeStyle = 'rgba(50,25,0,1)';
                 ctx.fill();
                 ctx.stroke();
-
-
+                
             }
         }
     </script>
+
+    <script>
+        function buttonfun() {
+        	gray = 0;
+            draw();
+        }
+    </script>
+    
+    <script>
+        function rangefun() {
+        	gray = document.getElementById("myRange").value;
+            draw();
+        }
+    </script>
+
 </head>
-<body onload="draw();">
-<canvas id="canvas" width="150" height="150"></canvas>
+<body onload="buttonfun();">
+<p>
+<canvas id="canvas" width="150" height="150"></canvas>		
+</p>
+<p>
+<button type="button" id="myBtn" onclick="buttonfun()">Redraw</button>
+
+<input type="range" id="myRange" value="0" max="255" onmouseup="rangefun()">	
+</p>
+
+
 </body>
 </html>
