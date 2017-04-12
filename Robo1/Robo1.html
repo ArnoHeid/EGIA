@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Example 01.05 - Control gui</title>
+    <script type="text/javascript" src="../libs/three.js"></script>
+    <script type="text/javascript" src="../libs/stats.js"></script>
+    <script type="text/javascript" src="../libs/dat.gui.js"></script>
+    <style>
+        body {
+            /* set margin to 0 and overflow to hidden, to go fullscreen */
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<div id="Stats-output">
+</div>
+<!-- Div which will hold the Output -->
+<div id="WebGL-output">
+</div>
+
+<!-- Javascript code that runs our Three.js examples -->
+<script type="text/javascript">
+
+    // once everything is loaded, we run our Three.js stuff.
+    function init() {
+
+        var stats = initStats();
+
+        // create a scene, that will hold all our elements such as objects, cameras and lights.
+        var scene = new THREE.Scene();
+
+        // create a camera, which defines where we're looking at.
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        // create a render and set the size
+        var renderer = new THREE.WebGLRenderer();
+
+        renderer.setClearColor(new THREE.Color(0xEEEEEE, 1.0));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMapEnabled = true;
+
+        var axes = new THREE.AxisHelper(20);
+        scene.add(axes);
+
+
+        // create the ground plane
+        var planeGeometry = new THREE.PlaneGeometry(60, 20, 1, 1);
+        var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
+        var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+        plane.receiveShadow = true;
+
+        // rotate and position the plane
+        plane.rotation.x = -0.5 * Math.PI;
+        plane.position.x = 15;
+        plane.position.y = 0;
+        plane.position.z = 0;
+
+        // add the plane to the scene
+        scene.add(plane);
+
+        // Body
+        var bodyGeometry = new THREE.BoxGeometry(4, 8, 4);
+        var bodyMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
+        var Body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+        Body.castShadow = true;
+
+        // position the cube
+        Body.position.x = 0;
+        Body.position.y = 4;
+        Body.position.z = 0;
+
+        // add the cube to the scene
+        scene.add(Body);
+
+        // Right shoulder
+        var rightShoulder = new THREE.Object3D();
+        rightShoulder.position.x = 2;
+        rightShoulder.position.y = 4;
+        rightShoulder.position.z = 0;
+
+        Body.add(rightShoulder);
+
+        // Right Upper Arm
+        var rightUpperArmGeometry = new THREE.BoxGeometry(4, 2, 4);
+        var rightUpperArmMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
+        var rightUpperArm = new THREE.Mesh(rightUpperArmGeometry, rightUpperArmMaterial);
+        rightUpperArm.castShadow = true;
+        rightUpperArm.position.x = 2;
+        rightUpperArm.position.y = 1;
+        rightUpperArm.position.z = 0;
+        rightShoulder.add(rightUpperArm);
+
+        //Right Ellbow
+        var rightEllbow = new THREE.Object3D();
+        rightEllbow.position.x = 2;
+        rightEllbow.position.y = -1;
+        rightEllbow.position.z = 0;
+        rightUpperArm.add(rightEllbow);
+
+        // Right Lower Arm
+        var rightLowerArmGeometry = new THREE.BoxGeometry(4, 2, 4);
+        var rightLowerArmMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
+        var rightLowerArm = new THREE.Mesh(rightLowerArmGeometry, rightLowerArmMaterial);
+        rightLowerArm.castShadow = true;
+        rightLowerArm.position.x = 2;
+        rightLowerArm.position.y = 1;
+        rightLowerArm.position.z = 0;
+        rightEllbow.add(rightLowerArm);
+
+        // left shoulder
+        var leftShoulder = new THREE.Object3D();
+        leftShoulder.position.x = -2;
+        leftShoulder.position.y = 4;
+        leftShoulder.position.z = 0;
+
+        Body.add(leftShoulder);
+
+        // left Upper Arm
+        var leftUpperArmGeometry = new THREE.BoxGeometry(4, 2, 4);
+        var leftUpperArmMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
+        var leftUpperArm = new THREE.Mesh(leftUpperArmGeometry, leftUpperArmMaterial);
+        leftUpperArm.castShadow = true;
+        leftUpperArm.position.x = -2;
+        leftUpperArm.position.y = 1;
+        leftUpperArm.position.z = 0;
+        leftShoulder.add(leftUpperArm);
+
+        //left Ellbow
+        var leftEllbow = new THREE.Object3D();
+        leftEllbow.position.x = -2;
+        leftEllbow.position.y = -1;
+        leftEllbow.position.z = 0;
+        leftUpperArm.add(leftEllbow);
+
+        // left Lower Arm
+        var leftLowerArmGeometry = new THREE.BoxGeometry(4, 2, 4);
+        var leftLowerArmMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
+        var leftLowerArm = new THREE.Mesh(leftLowerArmGeometry, leftLowerArmMaterial);
+        leftLowerArm.castShadow = true;
+        leftLowerArm.position.x = -2;
+        leftLowerArm.position.y = 1;
+        leftLowerArm.position.z = 0;
+        leftEllbow.add(leftLowerArm);
+
+
+
+        // Camera
+        camera.position.x = 0;
+        camera.position.y = 40;
+        camera.position.z = 60;
+        camera.lookAt(scene.position);
+
+        // add subtle ambient lighting
+        var ambientLight = new THREE.AmbientLight(0x0c0c0c);
+        scene.add(ambientLight);
+
+        // add spotlight for the shadows
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(-10, 60, 30);
+        spotLight.castShadow = true;
+        scene.add(spotLight);
+
+        // add the output of the renderer to the html element
+        document.getElementById("WebGL-output").appendChild(renderer.domElement);
+
+        // call the render function
+        var step = 0;
+
+        var controls = new function () {
+            this.angleUAR = 0.00;
+            this.angleLAR = 0.00;
+            this.angleUAL = 0.00;
+            this.angleLAL = 0.00;
+        };
+
+        var gui = new dat.GUI();
+        gui.add(controls, 'angleUAR', -1.5, 1.5);
+        gui.add(controls, 'angleLAR', -1.5, 1.5);
+        gui.add(controls, 'angleUAL', -1.5, 1.5);
+        gui.add(controls, 'angleLAL', -1.5, 1.5);
+        render();
+
+        function render() {
+            stats.update();
+            // rotate the cube around its axes
+
+            rightShoulder.rotation.z = controls.angleUAR;
+            rightEllbow.rotation.z = controls.angleLAR;
+            leftShoulder.rotation.z = controls.angleUAL;
+            leftEllbow.rotation.z = controls.angleLAL;
+            // render using requestAnimationFrame
+            requestAnimationFrame(render);
+            renderer.render(scene, camera);
+        }
+
+        function initStats() {
+
+            var stats = new Stats();
+
+            stats.setMode(0); // 0: fps, 1: ms
+
+            // Align top-left
+            stats.domElement.style.position = 'absolute';
+            stats.domElement.style.left = '0px';
+            stats.domElement.style.top = '0px';
+
+            document.getElementById("Stats-output").appendChild(stats.domElement);
+
+            return stats;
+        }
+    }
+    window.onload = init;
+
+</script>
+</body>
+</html>
