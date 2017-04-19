@@ -3,10 +3,13 @@
 <html>
 
 <head>
-    <title>Example 01.05 - Control gui</title>
+    <title>Robi1</title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
+    <script type="text/javascript" src="../libs/OrbitControls.js"></script>
+
+
     <style>
         body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
@@ -64,34 +67,34 @@
         scene.add(plane);
 
         // Body
-        var bodyGeometry = new THREE.BoxGeometry(4, 8, 4);
+        var bodyGeometry = new THREE.BoxGeometry(6, 10, 4);
         var bodyMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
-        var Body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-        Body.castShadow = true;
+        var body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+        body.castShadow = true;
 
         // position the cube
-        Body.position.x = 0;
-        Body.position.y = 4;
-        Body.position.z = 0;
+        body.position.x = 0;
+        body.position.y = 5;
+        body.position.z = 0;
 
         // add the cube to the scene
-        scene.add(Body);
+        scene.add(body);
 
         // Right shoulder
         var rightShoulder = new THREE.Object3D();
-        rightShoulder.position.x = 2;
+        rightShoulder.position.x = 3;
         rightShoulder.position.y = 4;
         rightShoulder.position.z = 0;
 
-        Body.add(rightShoulder);
+        body.add(rightShoulder);
 
         // Right Upper Arm
-        var rightUpperArmGeometry = new THREE.BoxGeometry(4, 2, 4);
+        var rightUpperArmGeometry = new THREE.BoxGeometry(4, 2, 3);
         var rightUpperArmMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
         var rightUpperArm = new THREE.Mesh(rightUpperArmGeometry, rightUpperArmMaterial);
         rightUpperArm.castShadow = true;
         rightUpperArm.position.x = 2;
-        rightUpperArm.position.y = 1;
+        rightUpperArm.position.y = 0;
         rightUpperArm.position.z = 0;
         rightShoulder.add(rightUpperArm);
 
@@ -103,7 +106,7 @@
         rightUpperArm.add(rightEllbow);
 
         // Right Lower Arm
-        var rightLowerArmGeometry = new THREE.BoxGeometry(4, 2, 4);
+        var rightLowerArmGeometry = new THREE.BoxGeometry(4, 2, 2);
         var rightLowerArmMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
         var rightLowerArm = new THREE.Mesh(rightLowerArmGeometry, rightLowerArmMaterial);
         rightLowerArm.castShadow = true;
@@ -114,19 +117,19 @@
 
         // left shoulder
         var leftShoulder = new THREE.Object3D();
-        leftShoulder.position.x = -2;
+        leftShoulder.position.x = -3;
         leftShoulder.position.y = 4;
         leftShoulder.position.z = 0;
 
-        Body.add(leftShoulder);
+        body.add(leftShoulder);
 
         // left Upper Arm
-        var leftUpperArmGeometry = new THREE.BoxGeometry(4, 2, 4);
+        var leftUpperArmGeometry = new THREE.BoxGeometry(4, 2, 3);
         var leftUpperArmMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
         var leftUpperArm = new THREE.Mesh(leftUpperArmGeometry, leftUpperArmMaterial);
         leftUpperArm.castShadow = true;
         leftUpperArm.position.x = -2;
-        leftUpperArm.position.y = 1;
+        leftUpperArm.position.y = 0;
         leftUpperArm.position.z = 0;
         leftShoulder.add(leftUpperArm);
 
@@ -138,7 +141,7 @@
         leftUpperArm.add(leftEllbow);
 
         // left Lower Arm
-        var leftLowerArmGeometry = new THREE.BoxGeometry(4, 2, 4);
+        var leftLowerArmGeometry = new THREE.BoxGeometry(4, 2, 2);
         var leftLowerArmMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
         var leftLowerArm = new THREE.Mesh(leftLowerArmGeometry, leftLowerArmMaterial);
         leftLowerArm.castShadow = true;
@@ -147,6 +150,16 @@
         leftLowerArm.position.z = 0;
         leftEllbow.add(leftLowerArm);
 
+
+        //Head
+        var headSphereGeometry = new THREE.SphereGeometry(2, 20, 20);
+        var headSphereMaterial = new THREE.MeshLambertMaterial({color: 0x7777ff});
+        var head = new THREE.Mesh(headSphereGeometry, headSphereMaterial);
+        head.position.x = 0;
+        head.position.y = 7;
+        head.position.z = 0;
+        head.castShadow = true;
+        body.add(head);
 
 
         // Camera
@@ -168,14 +181,57 @@
         // add the output of the renderer to the html element
         document.getElementById("WebGL-output").appendChild(renderer.domElement);
 
+        //var control = new THREE.OrbitControls( camera, renderer.domElement );
+        //control.addEventListener( 'change', render ); // remove when using animation loop
+        //control.enableZoom = false;
+
+
         // call the render function
         var step = 0;
+        var numOfArma=0;
 
         var controls = new function () {
-            this.angleUAR = 0.00;
+            this.angleUAR = 0.20;
             this.angleLAR = 0.00;
-            this.angleUAL = 0.00;
+            this.angleUAL = -0.20;
             this.angleLAL = 0.00;
+            this.angleLARH = 0.00;
+            this.angleLALH = 0.00;
+            this.transX = 0.00;
+            this.transY = 0.00;
+            this.removeArm = function () {
+                var allChildren = rightLowerArm.children;
+                var lastObject = allChildren[allChildren.length - 1];
+                if (lastObject instanceof THREE.Mesh) {
+                    rightLowerArm.remove(lastObject);
+                    this.numberOfObjects = scene.children.length;
+                }
+                if(numOfArma>0){
+                    numOfArma--;
+                }
+
+            };
+            this.addArm = function () {
+
+                numOfArma++;
+
+                // left Lower Arm
+                var newArmGeometry = new THREE.BoxGeometry(4, 2, 2);
+                var newArmMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
+                var newArm = new THREE.Mesh(leftLowerArmGeometry, leftLowerArmMaterial);
+                newArm.castShadow = true;
+                newArm.position.x = 4+4*(numOfArma-1);
+                newArm.position.y = 0;
+                newArm.position.z = 0;
+                newArm.name = "Arm"+numOfArma;
+
+                rightLowerArm.add(newArm);
+
+                // add the cube to the scene
+                scene.add(cube);
+                this.numberOfObjects = scene.children.length;
+            };
+            this.numberOfObjects = scene.children.length;
         };
 
         var gui = new dat.GUI();
@@ -183,6 +239,13 @@
         gui.add(controls, 'angleLAR', -1.5, 1.5);
         gui.add(controls, 'angleUAL', -1.5, 1.5);
         gui.add(controls, 'angleLAL', -1.5, 1.5);
+        gui.add(controls, 'angleLARH', -1.5, 1.5);
+        gui.add(controls, 'angleLALH', -1.5, 1.5);
+        gui.add(controls, 'transX', -10, 10);
+        gui.add(controls, 'transY', -10, 10);
+        gui.add(controls, 'addArm');
+        gui.add(controls, 'removeArm');
+        gui.add(controls, 'numberOfObjects').listen();
         render();
 
         function render() {
@@ -191,8 +254,14 @@
 
             rightShoulder.rotation.z = controls.angleUAR;
             rightEllbow.rotation.z = controls.angleLAR;
+            rightEllbow.rotation.y = controls.angleLARH;
+
             leftShoulder.rotation.z = controls.angleUAL;
             leftEllbow.rotation.z = controls.angleLAL;
+            leftEllbow.rotation.y = controls.angleLALH;
+
+            body.position.x = controls.transX;
+            body.position.z = controls.transY;
             // render using requestAnimationFrame
             requestAnimationFrame(render);
             renderer.render(scene, camera);
@@ -213,8 +282,11 @@
 
             return stats;
         }
+
     }
     window.onload = init;
+
+
 
 </script>
 </body>
